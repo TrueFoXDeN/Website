@@ -10,3 +10,4 @@ if (mysqli_connect_errno()) {
 } else {
     echo '<p>Verbindung zum MySQL Server erfolgreich aufgebaut.</p >';
 }
+?>
