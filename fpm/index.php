@@ -22,6 +22,8 @@ $database = 'flightplandb';
 $user_name = 'Christian';
 $password = 'Mastermind1324';
 $connect = mysqli_connect($host_name, $user_name, $password, $database);
+
+
 session_start();
 if (mysqli_connect_errno()) {
     die('<p>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '</p>');
@@ -325,6 +327,8 @@ function routeLaden($DEP, $ARR, $connect)
         echo "0 results";
     }
 }
+
+$connect -> close();
 ?>
 
 
