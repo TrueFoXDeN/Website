@@ -65,18 +65,18 @@ h1 {
     border-radius: 4px;
     box-sizing: border-box;
     outline: none;
-    background-image: url('../img/search.png');
+    background-image: url('search.png');
     background-size: 22px;
     background-position: 10px 11px;
     background-repeat: no-repeat;
-    -webkit-transition: width 0.4s ease-in-out;
-    -moz-transition: width 0.4s ease-in-out; /* Firefox 4 */
-    transition: width 0.4s ease-in-out;
+    /*-webkit-transition: width 0.4s ease-in-out;*/
+    /*-moz-transition: width 0.4s ease-in-out; !* Firefox 4 *!*/
+    /*transition: width 0.4s ease-in-out;*/
 }
 
 #id_route_input:focus {
-    width: 100%;
-    border: 2px solid #555;
+    /*width: 100%;*/
+    /*border: 2px solid #555;*/
 
 }
 
@@ -186,4 +186,17 @@ h1 {
 
 #id_input_date {
 
+}
+/*Takeoff section*/
+#id_takeoff_time{
+    width: 5%;
+}
+#id_dep_freq{
+    width:14%;
+}
+
+/*Descending section*/
+
+#id_app_freq_arr{
+    width: 14%;
 }
