@@ -30,20 +30,23 @@ if (mysqli_connect_errno()) {
 } else {
     echo '<p>Verbindung zum MySQL Server erfolgreich aufgebaut.</p >';
 }
-$Route = 'TEST';
-$Treibstoff = null;
-$Alternate = null;
+
 //$DEP = null;
 if (isset($_POST['name_departure_input'])) {
-    $DEP = $_POST['name_departure_input'];
+    $DEP_temp = $_POST['name_departure_input'];
+    $DEP = strtoupper($DEP_temp);
     sqlAbfrageDeparture($connect, $DEP);
     if (isset($_POST['name_arrival_input'])) {
-        $ARR = $_POST['name_arrival_input'];
+        $ARR_temp = $_POST['name_arrival_input'];
+        $ARR = strtoupper($ARR_temp);
         $Route = routeLaden($DEP, $ARR, $connect);
+        $Treibstoff = treibstoffLaden($DEP, $ARR, $connect);
+        $Alternate = alternateLaden($DEP, $ARR, $connect);
     }
 }
 if (isset($_POST['name_arrival_input'])) {
-    $ARR = $_POST['name_arrival_input'];
+    $ARR_temp = $_POST['name_arrival_input'];
+    $ARR = strtoupper($ARR_temp);
     sqlAbfrageArrival($connect, $ARR);
 }
 
@@ -127,7 +130,7 @@ if (isset($_POST['name_arrival_input'])) {
         <fieldset>
             <legend>ATC Clearance</legend>
             SID: <input type="text" id="id_sid">
-            RWY: <input type="text" id="id_rwy_takeoff">
+            RWY: <input type="text" id="id_rwy_takeoff" list="list_rwy_dep">
             Init CLB: <input type="text" id="id_init_clb">
             Squawk: <input type="text" id="id_squawk">
             <br><br>
@@ -241,18 +244,18 @@ function sqlAbfrageDeparture($connect, $DEP)
         echo "Delivery";
     }
 
-    /*$sql = "SELECT richtung FROM runways join airport_runway a on runways.id  = a.runway_id join airports b on  where a.icao ='$DEP'";
+    $sql = "SELECT distinct runways.richtung FROM runways join airport_runway on runways.id  = airport_runway.runway_id join airports on airport_runway.icao = '$DEP'";
     $result = $connect -> query($sql);
     if (mysqli_num_rows($result) > 0) {
-        echo "<datalist id ='list_delivery_dep'>";
+        echo "<datalist id ='list_rwy_dep'>";
         while($row = $result->fetch_assoc()) {
-            echo "<option value=".$row['ergebnis'].">";
-            echo $row['ergebnis'];
+            echo "<option value=".$row['richtung'].">";
+            echo $row['richtung'];
         }
         echo "</datalist>";
     } else {
         echo "0 results";
-    }*/
+    }
 }
 
 
@@ -327,6 +330,37 @@ function routeLaden($DEP, $ARR, $connect)
         echo "0 results";
     }
 }
+function treibstoffLaden($DEP, $ARR, $connect){
+    $sql = "SELECT treibstoff from routen where routen.start_flughafen = '$DEP' AND routen.ziel_flughafen ='$ARR'";
+    $ergebnis= '';
+    $result = $connect->query($sql);
+    if (mysqli_num_rows($result) > 0) {
+
+        while ($row = $result->fetch_assoc()) {
+            $ergebnis = $row['treibstoff'];
+        }
+        return $ergebnis;
+    } else {
+        echo "0 results";
+    }
+}
+
+function alternateLaden($DEP, $ARR, $connect){
+    $sql = "SELECT alternativer_flughafen from routen where routen.start_flughafen = '$DEP' AND routen.ziel_flughafen ='$ARR'";
+    $ergebnis= '';
+    $result = $connect->query($sql);
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $ergebnis = $row['alternativer_flughafen'];
+        }
+        return $ergebnis;
+    } else {
+        echo "0 results";
+    }
+
+
+}
+
 
 $connect -> close();
 ?>
